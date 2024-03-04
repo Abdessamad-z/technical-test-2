@@ -43,7 +43,7 @@ router.get("/:id", passport.authenticate("user", { session: false }), async (req
 router.post("/", passport.authenticate("user", { session: false }), async (req, res) => {
   try {
     if (!validatePassword(req.body.password)) return res.status(400).send({ ok: false, user: null, code: PASSWORD_NOT_VALIDATED });
-
+      
     const user = await UserObject.create({ ...req.body, organisation: req.user.organisation });
 
     return res.status(200).send({ data: user, ok: true });
@@ -57,6 +57,7 @@ router.post("/", passport.authenticate("user", { session: false }), async (req, 
 router.get("/", passport.authenticate("user", { session: false }), async (req, res) => {
   try {
     const users = await UserObject.find({ ...req.query, organisation: req.user.organisation }).sort("-last_login_at");
+    console.log({users})
     return res.status(200).send({ ok: true, data: users });
   } catch (error) {
     console.log(error);
@@ -67,7 +68,6 @@ router.get("/", passport.authenticate("user", { session: false }), async (req, r
 router.put("/:id", passport.authenticate("user", { session: false }), async (req, res) => {
   try {
     const obj = req.body;
-
     const user = await UserObject.findByIdAndUpdate(req.params.id, obj, { new: true });
     res.status(200).send({ ok: true, user });
   } catch (error) {

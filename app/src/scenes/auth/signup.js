@@ -23,6 +23,7 @@ export default () => {
       <Formik
         initialValues={{ username: "", organisation: "", password: "" }}
         onSubmit={async (values, actions) => {
+          console.log({values, actions})
           try {
             const { user, token } = await api.post(`/user/signup`, values);
             if (token) api.setToken(token);
@@ -51,6 +52,7 @@ export default () => {
                     Username
                   </label>
                 </div>
+                
                 {/* Error */}
                 <p className="text-[12px] text-[#FD3131]">{errors.username}</p>
               </div>
